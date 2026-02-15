@@ -3,8 +3,10 @@
 
 
 cleanup() {
-  tar -czf attendance_tracker_${input}_archive attendance_tracker_${input}
-  rm -rf attendance_tracker_${input}
+  if [ -n "$input" ] && [ -d "attendance_tracker_${input}" ]; then
+    tar -czf attendance_tracker_${input}_archive attendance_tracker_${input} 2>/dev/null
+    rm -rf attendance_tracker_${input}
+  fi
 }
 
 trap cleanup SIGINT
@@ -12,7 +14,7 @@ trap cleanup SIGINT
 
 echo "Verifying that the version installed on the system is python3"
 if command -v python3 > /dev/null 2>&1
-then 
+then
 	echo "Congratulations, the version currently installed on the system is python3"
 else
 	echo "Be careful the version currently installed on this system is not python3"
@@ -20,7 +22,12 @@ fi
 
 echo "Enter any number to represent the project"
 read input
-mkdir attendance_tracker_${input}
+
+if [ -d "attendance_tracker_${input}" ]; then
+    echo "Error: Directory attendance_tracker_${input} already exists!"
+    exit 1
+fi
+
 
 echo "Enter the Warning threshold (default 75):"
 read warning
@@ -33,7 +40,7 @@ then
 	warning="75"
 fi
 if [ -z "$failure" ]
-then 
+then
 	echo "Default value 50 is applied."
 	failure="50"
 fi
@@ -48,8 +55,11 @@ then
         echo "Enter a value in number form"
 	exit 1
 fi
-mkdir -p attendance_tracker_${input}/Helpers
-mkdir -p attendance_tracker_${input}/reports
+
+
+mkdir attendance_tracker_${input} || { echo "Error: Cannot create directory"; exit 1; }
+mkdir -p attendance_tracker_${input}/Helpers || { echo "Error: Cannot create Helpers"; exit 1; }
+mkdir -p attendance_tracker_${input}/reports || { echo "Error: Cannot create reports"; exit 1; }
 
 cat > attendance_tracker_${input}/attendance_checker.py << 'EOF'
 import csv
@@ -131,7 +141,7 @@ else
 fi
 
 if [ -d attendance_tracker_${input}/Helpers ]
-then 
+then
 	echo "Subdirectory attendance_tracker_${input}/Helpers exists"
 else
 	echo "Error file missing"
@@ -177,6 +187,3 @@ else
 fi
 
 echo "Setup complete! Project created at: attendance_tracker_${input}"
-
-
-
