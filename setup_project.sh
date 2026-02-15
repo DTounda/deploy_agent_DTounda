@@ -19,7 +19,7 @@ else
 	echo "Be careful the version currently installed on this system is not python3"
 fi
 
-echo "Enter any number to represent the project"
+echo "Enter any project name of your choicet"
 read input
 
 if [ -d "attendance_tracker_${input}" ]; then
@@ -57,8 +57,8 @@ fi
 
 
 mkdir attendance_tracker_${input} || { echo "Error: Cannot create directory"; exit 1; }
-mkdir -p attendance_tracker_${input}/Helpers || { echo "Error: Cannot create Helpers"; exit 1; }
-mkdir -p attendance_tracker_${input}/reports || { echo "Error: Cannot create reports"; exit 1; }
+mkdir -p attendance_tracker_${input}/Helpers || { echo "Error: unable to create folder"; exit 1; }
+mkdir -p attendance_tracker_${input}/reports || { echo "Error: unable create folder"; exit 1; }
 
 cat > attendance_tracker_${input}/attendance_checker.py << 'EOF'
 import csv
