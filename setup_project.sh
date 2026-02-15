@@ -12,7 +12,6 @@ cleanup() {
 trap cleanup SIGINT
 
 
-echo "Verifying that the version installed on the system is python3"
 if command -v python3 > /dev/null 2>&1
 then
 	echo "Congratulations, the version currently installed on the system is python3"
@@ -24,7 +23,7 @@ echo "Enter any number to represent the project"
 read input
 
 if [ -d "attendance_tracker_${input}" ]; then
-    echo "Error: Directory attendance_tracker_${input} already exists!"
+    echo "Error directory already exists!"
     exit 1
 fi
 
