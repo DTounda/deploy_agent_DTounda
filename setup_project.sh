@@ -4,7 +4,7 @@
 
 cleanup() {
   if [ -n "$input" ] && [ -d "attendance_tracker_${input}" ]; then
-    tar -czf attendance_tracker_${input}_archive attendance_tracker_${input} 2>/dev/null
+    tar -czf attendance_tracker_${input}_archive.tar.gz attendance_tracker_${input} 2>/dev/null
     rm -rf attendance_tracker_${input}
   fi
 }
@@ -19,7 +19,7 @@ else
 	echo "Be careful the version currently installed on this system is not python3"
 fi
 
-echo "Enter any project name of your choicet"
+echo "Enter any project name of your choice"
 read input
 
 if [ -d "attendance_tracker_${input}" ]; then
