@@ -12,7 +12,7 @@ cleanup() {
 trap cleanup SIGINT
 
 
-if command -v python3 > /dev/null 2>&1
+if python3 --version > /dev/null 2>&1
 then
 	echo "Congratulations, the version currently installed on the system is python3"
 else
@@ -43,16 +43,16 @@ then
 	echo "Default value 50 is applied."
 	failure="50"
 fi
-if ! [[ $warning =~ ^[0-9]+$ ]]
-then
-	echo "Enter a value in number form"
-	exit 1
-fi
-
-if ! [[ $failure =~ ^[0-9]+$ ]]
+if ! [[ $warning =~ ^[0-9]+$ ]] || [ "$warning" -lt 0 ] || [ "$warning" -gt 100 ]
 then
         echo "Enter a value in number form"
-	exit 1
+        exit 1
+fi
+
+if ! [[ $failure =~ ^[0-9]+$ ]] || [ "$failure" -lt 0 ] || [ "$failure" -gt 100 ]
+then
+        echo "Enter a value in number form"
+        exit 1
 fi
 
 
