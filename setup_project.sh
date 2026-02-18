@@ -2,14 +2,14 @@
 # This master shell script containing the logic for directory creation, file generation, sed manipulation, and the trap function.
 
 
-cleanup() {
+cleanup_file() {
   if [ -n "$input" ] && [ -d "attendance_tracker_${input}" ]; then
     tar -czf attendance_tracker_${input}_archive.tar.gz attendance_tracker_${input} 2>/dev/null
     rm -rf attendance_tracker_${input}
   fi
 }
 
-trap cleanup SIGINT
+trap cleanup_file SIGINT
 
 
 if python3 --version > /dev/null 2>&1
@@ -27,38 +27,73 @@ if [ -d "attendance_tracker_${input}" ]; then
     exit 1
 fi
 
+echo "Do you want to modify the values of warning and failure threshold?"
+echo "Enter either y for yes and n for no:"
+read answer
 
-echo "Enter the Warning threshold (default 75):"
-read warning
-echo "Enter the Failure threshold (default 50):"
-read failure
-
-if [ -z "$warning" ]
+if [ "$answer" == "y" ] || [ "$answer" == "Y" ]
 then
-	echo "Default value 75 is applied."
+
+	echo "Enter the Warning threshold (default 75):"
+
+	read warning
+
+	echo "Enter the Failure threshold (default 50):"
+
+	read failure
+	
+
+
+	if [ -z "$warning" ]
+
+	then
+	
+		echo "Default value 75 is applied."
+	
+		warning="75"
+
+	fi
+
+	if [ -z "$failure" ]
+
+	then
+	
+		echo "Default value 50 is applied."
+	
+		failure="50"
+
+	fi
+
+	if ! [[ $warning =~ ^[0-9]+$ ]] || [ "$warning" -lt 0 ] || [ "$warning" -gt 100 ]
+
+	then
+        
+		echo "Enter a value in number form"
+        
+		exit 1
+
+	fi
+
+
+	if ! [[ $failure =~ ^[0-9]+$ ]] || [ "$failure" -lt 0 ] || [ "$failure" -gt 100 ]
+
+	then
+        
+		echo "Enter a value in number form"
+        
+		exit 1
+
+	fi
+
+else 
+	echo "The default warning and failutre thresholds will be applied"
 	warning="75"
-fi
-if [ -z "$failure" ]
-then
-	echo "Default value 50 is applied."
 	failure="50"
 fi
-if ! [[ $warning =~ ^[0-9]+$ ]] || [ "$warning" -lt 0 ] || [ "$warning" -gt 100 ]
-then
-        echo "Enter a value in number form"
-        exit 1
-fi
 
-if ! [[ $failure =~ ^[0-9]+$ ]] || [ "$failure" -lt 0 ] || [ "$failure" -gt 100 ]
-then
-        echo "Enter a value in number form"
-        exit 1
-fi
-
-
-mkdir attendance_tracker_${input} || { echo "Error: Cannot create directory"; exit 1; }
-mkdir -p attendance_tracker_${input}/Helpers || { echo "Error: unable to create folder"; exit 1; }
-mkdir -p attendance_tracker_${input}/reports || { echo "Error: unable create folder"; exit 1; }
+mkdir attendance_tracker_${input} || { echo "Error: Was not able to create directory"; exit 1; }
+mkdir -p attendance_tracker_${input}/Helpers || { echo "Error: Was not able to create folder"; exit 1; }
+mkdir -p attendance_tracker_${input}/reports || { echo "Error: Was not able to create folder"; exit 1; }
 
 cat > attendance_tracker_${input}/attendance_checker.py << 'EOF'
 import csv
@@ -185,4 +220,4 @@ else
 
 fi
 
-echo "Setup complete! Project created at: attendance_tracker_${input}"
+echo "Configuration complete successfully! Everything was successfully created at: attendance_tracker_${input}"
