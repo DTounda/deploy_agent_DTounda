@@ -102,7 +102,7 @@ attendance_tracker_${input}             # The parent directory of the project
 ## Errors Handling
    - If the user does not have python3 the system will print a warning message but will still continue to run
    - If the values of warning and failure are not numeric, the user will be prompted to enter numeric values in the range specify
-   - If directory already exist with that same direcotry name, change the directory name.
+   - If directory already exist with that same directory name, change the directory name.
 
 
 ## License
@@ -114,9 +114,7 @@ GitHub: https://github.com/DTounda/deploy_agent_DTounda.git
 
 
 
-
-
-
+Link to the video: https://youtu.be/He87bJaZk3g
 
 
 
